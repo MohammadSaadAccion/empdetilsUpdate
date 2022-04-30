@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Employee </title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+  var currentPageIndex = 0;
+  var recordSize = 5;
+  function getData()
+  {
+       $.ajax( 
+		 { 
+			 url:"/empdetails",
+			 success:function(data) 
+			 { 
+			     console.log('data length'+data.length);
+			     var emp='';
+			     var j = currentPageIndex * recordSize;
+			     var k=j;
+			     if(j==0)
+	    		  {
+		    		  for (var i = currentPageIndex * recordSize;i < data.length && i < currentPageIndex* recordSize + recordSize; i++)
+				    	 {
+					    	  
+							    emp+='<tr>';
+							    emp+='<td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+data[i].empid+');">'+data[i].empid+'</button></td>';
+							    emp+='<td>'+data[i].empname+'</td>';
+							    emp+='<td>'+data[i].empmobile+'</td>';
+							    emp+='<td>'+data[i].empemail+'</td>';
+							    emp+='<td>'+data[i].empaddress+'</td>';
+							    emp+='<td>'+data[i].emppassword+'</td>';
+							    emp+='<td>'+data[i].createddate+'</td>';
+							    emp+='<td>'+data[i].modifieddate+'</td>';
+							    emp+='<td> <button class="btn btn-danger" onclick="deleteInfo('+data[i].empid+');">delete</button> <td>';
+							    emp+='</tr>';
+						}
+					    $('#tbody').html(emp);
+					    $('.tbody').append('<tr><td colspan="9"><button style="margin-left:94%;" type="button" class="btn btn-primary fa fa-arrow-right" onclick="nextData()"></button></td></tr>');
+	    		  }
+			     else if((k+6)>data.length)
+			    	 {
+			    	 for (var i = currentPageIndex * recordSize;i < data.length && i < currentPageIndex * recordSize + recordSize; i++)
+			    	 {
+				    	   
+						    emp+='<tr>';
+						    emp+='<td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+data[i].empid+');">'+data[i].empid+'</button></td>';
+						    emp+='<td>'+data[i].empname+'</td>';
+						    emp+='<td>'+data[i].empmobile+'</td>';
+						    emp+='<td>'+data[i].empemail+'</td>';
+						    emp+='<td>'+data[i].empaddress+'</td>';
+						    emp+='<td>'+data[i].emppassword+'</td>';
+						    emp+='<td>'+data[i].createddate+'</td>';
+						    emp+='<td>'+data[i].modifieddate+'</td>';
+						    emp+='<td> <button class="btn btn-danger" onclick="deleteInfo('+data[i].empid+');">delete</button> <td>';
+						    emp+='</tr>';
+					}
+				    $('#tbody').html(emp);
+				    $('.tbody').append('<tr><td colspan="9"><button style="margin-right:100%" class="btn btn-primary fa fa-arrow-left" "type="button" onclick="previousData();"></button></td></tr>');
+
+			    	 }
+			     
+			     else if(j<data.length&&j<currentPageIndex * recordSize + recordSize)
+			    	 {
+				    	 for (var i = currentPageIndex * recordSize;i < data.length && i < currentPageIndex * recordSize + recordSize; i++)
+				    	 {
+					    	   
+							    emp+='<tr>';
+							    emp+='<td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+data[i].empid+');">'+data[i].empid+'</button></td>';
+							    emp+='<td>'+data[i].empname+'</td>';
+							    emp+='<td>'+data[i].empmobile+'</td>';
+							    emp+='<td>'+data[i].empemail+'</td>';
+							    emp+='<td>'+data[i].empaddress+'</td>';
+							    emp+='<td>'+data[i].emppassword+'</td>';
+							    emp+='<td>'+data[i].createddate+'</td>';
+							    emp+='<td>'+data[i].modifieddate+'</td>';
+							    emp+='<td> <button class="btn btn-danger" onclick="deleteInfo('+data[i].empid+');">delete</button> <td>';
+							    emp+='</tr>';
+						}
+					    $('#tbody').html(emp);
+					    $('.tbody').append('<tr><td colspan="5"><button style="margin-right:450px;" class="btn btn-primary fa fa-arrow-left" "type="button" onclick="previousData();"></button></td><td colspan="4"><button style="margin-left:90%" type="button" class="btn btn-primary fa fa-arrow-right" onclick="nextData()"></button></td></tr>');
+			    	 }
+			     	
+			 },
+			 type:'GET' // POSt   PUT   DELETE  
+		 } );
+  }
+  
+  
+  function nextData()
+  {
+  	currentPageIndex++;
+  	getData();
+  }
+  function previousData()
+  {
+  	currentPageIndex--;
+  	getData();
+  }
+  	
+  
+  function getInfo(){
+	  var search=$("#search").val();
+	  if(search!="")
+		  {
+		  $.ajax( 
+					 { 
+						 url:"/empdetails/"+search,
+						 success:function(data) 
+						 { 
+						            console.log("search data");
+						            var emp='';
+								    emp+='<tr>';
+								    emp+='<td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+data.empid+');">'+data.empid+'</button></td>';
+								    emp+='<td>'+data.empname+'</td>';
+								    emp+='<td>'+data.empmobile+'</td>';
+								    emp+='<td>'+data.empemail+'</td>';
+								    emp+='<td>'+data.empaddress+'</td>';
+								    emp+='<td>'+data.emppassword+'</td>';
+								    emp+='<td>'+data.createddate+'</td>';
+								    emp+='<td>'+data.modifieddate+'</td>';
+								    emp+='<td> <button class="btn btn-danger" onclick="deleteInfo('+data.empid+');">delete</button> <td>'
+								    emp+='</tr>';
+						
+						    $('#tbody').html(emp);
+						  },
+						  type:'GET' // POSt   PUT   DELETE
+						 
+	          });
+		  }
+	  else
+		  {
+		    getData();
+		  }
+	  
+	 
+}
+  
+  
+  function deleteInfo(id){
+	   console.log(id);
+	   var result = confirm("are you Sure!");
+		if(result==true) 
+		{
+			$.ajax( {
+				    type:"DELETE",
+				    url:"/empdetails/ "+ id, 
+				    contentType: "application/json",
+					
+					success:function(resp, status){
+						console.log(resp+" "+ status);	
+						//alert("deleted");
+					},
+				
+		          });
+		}
+	   
+}
+  
+  function getUpdateInfo(id){
+	    $.get("/empdetails/" + id, function(data) {
+		console.log(data);
+		$('#id').val(data.empid);
+		$('#name').val(data.empname);
+		$('#mobile').val(data.empmobile);
+		$('#email').val(data.empemail);
+		$('#address').val(data.empaddress);
+		$('#password').val(data.emppassword);
+		$('#create').val(data.createddate);
+		$('#modify').val(data.modifieddate);
+
+	}); 
+}  
+  
+  
+function updateInfo() {
+		 var data = {}
+			data["empname"] = $("#name").val();
+			data["empmobile"] = $("#mobile").val();
+			data["empemail"] = $("#email").val();
+			data["empaddress"] = $("#address").val();
+			data["emppassword"] = $("#password").val();
+			
+			var id=$("#id").val();
+			$.ajax( {
+				    url:"/empdetails/"+id, 
+				    contentType: "application/json",
+				    data: JSON.stringify(data), 
+					type:"PUT",
+					dataType: 'json',
+					success:function(resp, status){
+						console.log(resp+" "+ status);	
+						alert("updated");
+					},
+					error:function(resp,status){
+						alert("error");
+					}
+			});
+}
+function save() {
+	var data = {}
+	data["empname"] = $("#name1").val();
+	data["empmobile"] = $("#mobile1").val();
+	data["empemail"] = $("#email1").val();
+	data["empaddress"] = $("#address1").val();
+	data["emppassword"] = $("#password1").val();
+	
+	$.ajax( {url:"/empdetails", 
+		    contentType: "application/json",
+		    data: JSON.stringify(data), 
+			type:"post",
+			dataType: 'json',
+			success:function(resp, status){
+				console.log(resp+" "+ status);	
+				alert("Inserted");
+			},
+	});
+}
+  
+</script>
+     
+</head>
+
+<body>
+  <main>
+    <div class="container text-center">
+      <h1 class="bg-light py-4  text-success">
+        <i class="fas fa-user-graduate"></i>   Employee Details
+      </h1>
+      <hr>
+      <button class="fas fa-user-edit btn btn-success" id="btn-create" onclick="getData();">Read</button>
+ 
+      <button style="margin-left:50%" class="fas fa-user-plus btn btn-success" id="btn-create" data-toggle="modal" data-target="#createModal">Create</button>
+      <div class="form-inline md-form mr-auto mb-4 float-right" >
+         <input class=" mr-sm-2" type="text" id="search" placeholder="Search" aria-label="ID" name="name" onkeyup="getInfo();">
+      </div>
+      <!--  Table -->
+      <div>
+        <table style="margin-right:200px;" class="table table-striped " id="myEmptable">
+          <thead>
+	            <tr>
+	              <th scope="col">ID</th>
+	              <th scope="col">Name</th>
+	              <th scope="col">Phone</th>
+	              <th scope="col">Email</th>
+	              <th scope="col">Address</th>
+	              <th scope="col">Password</th>
+	              <th scope="col">CreatedDate</th>
+	              <th scope="col">ModifiedDate</th>
+	            </tr>
+          </thead>
+          <tbody id="tbody" class="tbody">  
+                   
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Button trigger modal -->
+
+<!--Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">  Update Page</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <input type="text" id="id" name="name" class="form-control" autocomplete="off" placeholder="ID" readonly/><br>
+          <input type="text" id="name" name="name" class="form-control" autocomplete="off" placeholder="Name" /><br>
+          <input type="text" id="mobile" name="phone" class="form-control" autocomplete="off" placeholder="Mobile" /><br>
+          <input type="text" id="email" name="email" class="form-control " autocomplete="off" placeholder="Email" /><br>
+          <input type="text" id="address" name="address" class="form-control " autocomplete="off" placeholder="Address" /><br>
+          <input type="text" id="password" name="password" class="form-control" autocomplete="off" placeholder="Password" /><br>
+          <input style="margin-left: 10%; margin-right: 10%;" type="submit" value="update" class="btn btn-warning"  onclick='updateInfo();'/><br>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal End -->
+
+
+
+<!--Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">SignUp Page</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+           <input type="text" id="name1" name="name" class="form-control" autocomplete="off" placeholder="Name" /><br>
+          <input type="text" id="mobile1" name="phone" class="form-control" autocomplete="off" placeholder="Mobile" /><br>
+          <input type="text" id="email1" name="email" class="form-control " autocomplete="off" placeholder="Email" /><br>
+          <input type="text" id="address1" name="address" class="form-control " autocomplete="off" placeholder="Address" /><br>
+          <input type="password" id="password1" name="password" class="form-control" autocomplete="off" placeholder="Password" /><br>
+          <input style="margin-left: 10%; margin-right: 10%;" type="submit" value="submit" class="btn btn-success"  onclick='save();'/><br>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal End -->
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+
+</body>
+
+
+<script>
+</script>
+</html>

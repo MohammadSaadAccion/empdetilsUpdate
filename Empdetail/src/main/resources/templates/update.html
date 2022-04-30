@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Employee </title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+  function getId()
+  {
+       $.ajax( 
+		 { 
+			 url:"/empdetails",
+			 success:function(data) 
+			 { 
+				 console.log(data);
+			     var emp='';
+				 $.each( data, function(key,value) 
+				   {
+					    console.log(value.empid);
+					    emp+='<button type="button" class="btn btn-outline-warning btn-sm " data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+value.empid+');">'+value.empid+'</button>';
+				   });
+			    $('#id').html(emp);
+			 },
+			 type:'GET' // POSt   PUT   DELETE  
+		 } );
+  }
+  
+  
+  function getName()
+  {
+       $.ajax( 
+		 { 
+			 url:"/empdetails",
+			 success:function(data) 
+			 { 
+				 console.log(data);
+			     var emp='';
+				 $.each( data, function(key,value) 
+				   {
+					    console.log(value.empid);
+					    emp+='<button type="button" class="btn btn-outline-warning btn-sm " data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+value.empid+');">'+value.empname+'</button>';
+				   });
+			    $('#name').html(emp);
+			 },
+			 type:'GET' // POSt   PUT   DELETE  
+		 } );
+  }
+  
+  function getMobile()
+  {
+       $.ajax( 
+		 { 
+			 url:"/empdetails",
+			 success:function(data) 
+			 { 
+				 console.log(data);
+			     var emp='';
+				 $.each( data, function(key,value) 
+				   {
+					    console.log(value.empid);
+					    emp+='<button type="button" class="btn btn-outline-warning btn-sm " data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+value.empid+');">'+value.empmobile+'</button>';
+				   });
+			    $('#mobile').html(emp);
+			 },
+			 type:'GET' // POSt   PUT   DELETE  
+		 } );
+  }
+  
+  function getEmail()
+  {
+       $.ajax( 
+		 { 
+			 url:"/empdetails",
+			 success:function(data) 
+			 { 
+				 console.log(data);
+			     var emp='';
+				 $.each( data, function(key,value) 
+				   {
+					    console.log(value.empid);
+					    emp+='<button type="button" class="btn btn-outline-warning btn-sm " data-toggle="modal" data-target="#updateModal" onclick="getUpdateInfo('+value.empid+');">'+value.empemail+'</button>';
+				   });
+			    $('#email').html(emp);
+			 },
+			 type:'GET' // POSt   PUT   DELETE  
+		 } );
+  }
+  
+  
+  function getUpdateInfo(id){
+	    $.get("/empdetails/" + id, function(data) {
+		console.log(data);
+		$('#id1').val(data.empid);
+		$('#name1').val(data.empname);
+		$('#mobile1').val(data.empmobile);
+		$('#email1').val(data.empemail);
+		$('#address1').val(data.empaddress);
+		$('#password1').val(data.emppassword);
+
+	}); 
+}
+  
+  function updateInfo() {
+		 var data = {}
+			data["empname"] = $("#name1").val();
+			data["empmobile"] = $("#mobile1").val();
+			data["empemail"] = $("#email1").val();
+			data["empaddress"] = $("#address1").val();
+			data["emppassword"] = $("#password1").val();
+			
+			var id=$("#id1").val();
+			$.ajax( {
+				    url:"/empdetails/"+id, 
+				    contentType: "application/json",
+				    data: JSON.stringify(data), 
+					type:"PUT",
+					dataType: 'json',
+					success:function(resp, status){
+						console.log(resp+" "+ status);	
+						alert("updated");
+					},
+					error:function(resp,status){
+						alert("error");
+					}
+			});
+}
+  </script>
+  
+</head>
+
+<body>
+  <main>
+    <div class="container text-center">
+      <h1 class="bg-light py-4 text-warning">
+        <i class="fas fa-user-graduate"></i>  Update Employee Details
+      </h1>
+      <hr>
+      <div class="d-flex justify-content-center">
+        <div class="row">
+        <div class="col-md-3">
+        <div class="dropdown">
+          <button class="fas fa-upload btn btn-warning" onmouseover="getId();"> ID</button>
+          <div class="dropdown-content" id="id">
+          
+          </div>
+        </div>
+        </div>
+    <div class="col-md-3">
+    <div class="dropdown">
+      <button class="fas fa-upload btn btn-warning" onmouseover="getName();">Name</button>
+      <div class="dropdown-content" id="name">
+             
+      </div>
+    </div>
+    </div>
+    <div class="col-md-3">
+      <div class="dropdown">
+        <button class="fas fa-upload btn btn-warning" onmouseover="getMobile();">Mobile</button>
+        <div class="dropdown-content" id="mobile">
+             
+        </div>
+      </div>
+      </div>
+      <div class="col-md-3">
+        <div class="dropdown">
+          <button class="fas fa-upload btn btn-warning" onmouseover="getEmail();">Email</button>
+          <div class="dropdown-content" id="email">
+           
+          </div>
+        </div>
+        </div>
+    </div>
+  </div>
+    <div class="d-flex justify-content-center">
+      <img style="width: 50%;margin-top:20px;" src="/img1.jpeg" alt="">
+    </div>
+  
+  </div>
+  </main>
+
+
+
+ <!-- Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">  Update Page</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <input type="text" id="id1" name="name" class="form-control" autocomplete="off" placeholder="ID" readonly/><br>
+          <input type="text" id="name1" name="name" class="form-control" autocomplete="off" placeholder="Name" /><br>
+          <input type="text" id="mobile1" name="phone" class="form-control" autocomplete="off" placeholder="Mobile" /><br>
+          <input type="text" id="email1" name="email" class="form-control " autocomplete="off" placeholder="Email" /><br>
+          <input type="text" id="address1" name="address" class="form-control " autocomplete="off" placeholder="Address" /><br>
+          <input type="text" id="password1" name="password" class="form-control" autocomplete="off" placeholder="Password" /><br>
+          <input style="margin-left: 10%; margin-right: 10%;" type="submit" value="update" class="btn btn-warning"  onclick='updateInfo();'/><br>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal End -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+
+  <!-- Include Dexie -->
+  <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+  
+</body>
+
+</html>

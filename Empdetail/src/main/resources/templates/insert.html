@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Employee </title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+  function save() {
+		var data = {}
+		data["empname"] = $("#name").val();
+		data["empmobile"] = $("#mobile").val();
+		data["empemail"] = $("#email").val();
+		data["empaddress"] = $("#address").val();
+		data["emppassword"] = $("#password").val();
+		console.log(data);
+		$.ajax( {url:"/empdetails", 
+			    contentType: "application/json",
+			    data: JSON.stringify(data), 
+				type:"post",
+				dataType: 'json',
+				success:function(resp, status){
+					console.log(resp+" "+ status);	
+					alert("Inserted");
+				},
+		});
+	}
+  </script>
+</head>
+
+<body>
+  <main>
+    <div class="container text-center">
+      <h1 class="bg-light py-4  text-success">
+        <i class="fas fa-user-graduate"></i> Employee SignUp Page
+      </h1>
+      <hr>
+      <div class="d-flex justify-content-center">
+        <div class="w-50">
+          <input type="text" id="name" name="name" class="form-control" autocomplete="off" placeholder="Name"  th:value="*{name}"/>
+          
+          <input type="text" id="mobile" name="phone" class="form-control" autocomplete="off" placeholder="Mobile"   th:value="*{mobile}" />
+          
+          <input type="text" id="email" name="email" class="form-control " autocomplete="off" placeholder="Email" th:value="*{email}"/>
+        
+          <input type="text" id="address" name="address" class="form-control " autocomplete="off" placeholder="Address" th:value="*{address}"/>
+       
+          <input type="password" id="password" name="password" class="form-control" autocomplete="off" placeholder="Password" th:value="*{password}"/>
+         
+          <input style="margin-left: 10%; margin-right: 10%;" type="submit" value="submit" class="btn btn-success"  onclick='save();'/>
+         
+        </div>
+      </div>
+
+    </div>
+ 
+  </main>
+
+  <!-- Labels -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <!-- Include Dexie -->
+  <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+
+</body>
+
+</html>
